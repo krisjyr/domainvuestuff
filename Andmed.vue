@@ -1,18 +1,33 @@
 <script setup>
+import { defineComponent, reactive, ref } from 'vue';
+let check = ref(false)
 
-function ettevote() {
+let formData = {
+    eesnimi: "",
+    perekonnanimi: "",
+    email: "",
+    telefon: "",
+    aadress1: "",
+    aadress2: "",
+    maakond: "",
+    linn: "",
+    ettevote: "",
+    regkood: "",
+    postiindeks: "",
+    parool: "",
+    parool2: "",
+};
 
-    const input = document.getElementById("checkbox")
-    const hider = document.getElementById("hider")
-    if (input.checked) {
-        hider.style.display = "flex"
-        console.log("crazy")
-    } else {
-        hider.style.display = "none"
-    }
+function handleSubmit(){
+            // Perform form validation logic here
+            if (formData.eesnimi.length === 0 || formData.perekonnanimi.length === 0) {
+                console.log('Please enter both ees- ja perekonnanimi name');
+                return;
+            }
 
-}
-
+            // Perform form submission logic here
+            console.log(`Form submitted with data: ${JSON.stringify(formData)}`);
+        }; 
 </script>
 
 <template>
@@ -24,100 +39,99 @@ function ettevote() {
             <li class="step step-primary">Info</li>
             <li class="step">Maksmine</li>
         </ul>
+
         <!-- Domeenid -->
-        <container class="flex 2xl:flex-row flex-col gap-8 w-[100%]">
+        <form class="flex 2xl:flex-row flex-col gap-8 w-[100%]" @submit.prevent="handleSubmit()">
             <div class="2xl:w-[55%] w-full mx-2">
-                <form class="mb-4">
+                <div class="mb-4">
                     <div class="rounded-t-md text-xl font-semibold p-4 bg-zinc-900">Personaalne Informatsioon</div>
                     <table class="table table-md bg-zinc-900/50 rounded-md rounded-t-none">
                         <tbody>
                             <!-- row 1 -->
                             <tr class="border-0">
                                 <td class="flex content-center gap-2">
-                                    <input type="text" placeholder="Eesnimi*"
+                                    <input type="text" placeholder="Eesnimi*" v-model="formData.eesnimi"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
-                                    <input type="text" placeholder="Perekonnanimi*"
+                                    <input type="text" placeholder="Perekonnanimi*" v-model="formData.perekonnanimi"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
                                 </td>
                                 <td class="flex content-center gap-2">
-                                    <input type="email" placeholder="Email*"
+                                    <input type="email" placeholder="Email*" v-model="formData.email"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
-                                    <input type="tel" placeholder="Telefon*"
+                                    <input type="tel" placeholder="Telefon*" v-model="formData.telefon"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </form>
-                <form class="mb-4">
+                </div>
+                <div class="mb-4">
                     <div class="rounded-t-md text-xl font-semibold p-4 bg-zinc-900">Billing</div>
                     <table class="table table-md bg-zinc-900/50 rounded-md rounded-t-none">
                         <tbody>
                             <!-- row 1 -->
                             <tr class="border-0">
                                 <td class="flex content-center gap-2">
-                                    <input type="text" placeholder="Aadress 1*"
+                                    <input type="text" placeholder="Aadress 1*" v-model="formData.aadress1"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
-                                    <input type="text" placeholder="Aadress 2 (valikuline)"
+                                    <input type="text" placeholder="Aadress 2 (valikuline)" v-model="formData.aadress2"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto" />
                                 </td>
                                 <td class="flex content-center gap-2">
-                                    <input type="text" placeholder="Maakond*"
+                                    <input type="text" placeholder="Maakond*" v-model="formData.maakond"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
-                                    <input type="text" placeholder="Linn*"
+                                    <input type="text" placeholder="Linn*" v-model="formData.linn"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
                                 </td>
-                                <td id="hider" class="flex content-center gap-2">
-                                    <input type="text" placeholder="Ettevõtte nimi*"
+                                <td v-if="check" class="flex content-center gap-2">
+                                    <input type="text" placeholder="Ettevõtte nimi*" v-model="formData.ettevote"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
-                                    <input type="text" placeholder="Ettevõtte reg. kood*"
+                                    <input type="text" placeholder="Ettevõtte reg. kood*" v-model="formData.regkood"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
                                 </td>
                                 <td class="flex content-center gap-2">
-                                    <input type="text" placeholder="Postiindeks*"
+                                    <input type="text" placeholder="Postiindeks*" v-model="formData.postiindeks"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </form>
+                </div>
                 <div class="flex items-center mb-4">
                     <label class="label cursor-pointer">
-                        <input id="checkbox" type="checkbox" onclick="ettevote()"
-                            class="checkbox checkbox-primary checkbox-lg" />
+                        <input type="checkbox" @click="check = !check" class="checkbox checkbox-primary checkbox-lg" />
                         <span class="ml-4 select-none text-lg">Ettevõte</span>
                     </label>
                 </div>
-                <form class="mb-4">
+                <div class="mb-4">
                     <div class="rounded-t-md text-xl font-semibold p-4 bg-zinc-900">Konto</div>
                     <table class="table table-md bg-zinc-900/50 rounded-md rounded-t-none">
                         <tbody>
                             <!-- row 1 -->
                             <tr class="border-0">
                                 <td class="flex content-center gap-2">
-                                    <input type="password" placeholder="Parool*"
+                                    <input type="password" placeholder="Parool*" v-model="formData.parool"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
-                                    <input type="password" placeholder="Kinnita Parool*"
+                                    <input type="password" placeholder="Kinnita Parool*" v-model="formData.parool2"
                                         class="input input-bordered input-primary w-full max-w-lg m-auto invalid:input-error"
                                         required />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </form>
+                </div>
             </div>
-
 
 
             <!-- Ostukorv ja nupp -->
@@ -215,18 +229,20 @@ function ettevote() {
                         </tr>
                     </tfoot>
                 </table>
-                <button type="submit" @click="$router.push('/works/school/tailwind/domainstore2')"
-                class="btn btn-primary btn-outline w-[100%] mt-[1rem] m-auto font-bold">JÄTKA</button>
-            <button type="submit" @click="$router.push('/works/school/tailwind/domainstore1')"
-                class="btn btn-neutral btn-outline w-[100%] mt-[1rem] m-auto font-bold">TAGASI</button>
+                <button type="submit" class="btn btn-primary btn-outline w-[100%] mt-[1rem] m-auto font-bold">JÄTKA</button>
+                <button type="submit" @click="$router.push('/works/school/tailwind/domainstore1')"
+                    class="btn btn-neutral btn-outline w-[100%] mt-[1rem] m-auto font-bold">TAGASI</button>
 
-        </div>
-    </container>
+            </div>
+        </form>
 
-</main>
+    </main>
 
-</html></template>
+    </html>
+</template>
 
-<style scoped>#hider {
+<style scoped>
+#hider {
     display: none;
-}</style>
+}
+</style>
